@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>日历</title>
+</head>
+<style>
+#main{
+    width:37rem;
+    height: 33rem;
+    border: 1px solid black;
+}
+#top{
+    height: 3rem;
+    border-bottom: 1px solid black;
+    text-align: center;
+    line-height: 3rem;
+}
+#selecter{
+    font-size: large;
+}
+
+#bottom{
+    margin-top: 0.5rem;
+    margin-left: 1.25rem;
+    height:29rem;
+    width:35rem;
+    /* background-color: lightgrey; */
+}
+.inner{
+    width:4rem;
+    height: 4rem;
+    margin: 0.35rem;
+    text-align: center;
+    line-height: 4rem;
+    /* border: 1px solid black; */
+    display: inline-block;
+}
+.inner-top{
+    color: rgb(157, 168, 179);
+}
+.inner-checked{
+    border-radius: 2rem;
+    border: 1px solid black;
+    box-sizing: border-box;
+    background: blanchedalmond;
+}
+</style>
+<script>
+window.onload=function(){
+    var bottom=document.getElementById("bottom")
+    var bottom_t=document.getElementById("bottom-t")
+    var bottom_b=document.getElementById("bottom-b")
+    var selecter=document.getElementById("selecter")
+    var arr=["日","一","二","三","四","五","六"]
+    var date=new Date()
+    var year=date.getFullYear()
+    var month=date.getMonth()// 0,1,2,3,4,5,6,7,8,9,10,11
+    var dt=date.getDate()
+    var day=date.getDay()//0,1,2,3,4,5,6
+
+    function month_1_day(dt,day){
+        //@param date,day 天，星期
+        //返回值 本月1号是星期几
+        if(day==0){
+            day=7
+        }
+        var result=day-dt%7+1
+        while(result<0){
+            result+=7
+        }
+        return result
+    }
+    
+    function every_month_1_day(now_year,now_month,year,month){
+        //@param now_year,now_month,year,month 当前年，当前的月份，目标年，目标月份
+        //返回值 目标月1号是星期几
+        var btw_months=(now_year-year)*12+now_month-month//相差的月份数
+        var loop_year
+        var loop_month
+        var days=0//相差的天数
+        var tip=0//标记向前循环还是向后循环，0为向前
+        //console.log(btw_months)
+        if(btw_months>=0){
+            //向前
+            loop_year=year
+            loop_month=month
+            
+        }else{
+            //向后
+            loop_year=now_year
+            loop_month=now_month
+            btw_months=Math.abs(btw_months)
+            tip=1
+        }
+        console.log(loop_year,loop_month,btw_months)
+        for(var i=0;i<btw_months;i++){               
+                //console.log(loop_month)
+                if(loop_month<12){
+                    //console.log(loop_year+parseInt(loop_month/12),loop_month)
+                    //循环到的年 loop_year+parseInt(loop_month/12)
+                    //循环到到月 loop_month
+                    days+=get_days(loop_year+parseInt(loop_month/12),loop_month)
+                }else{
+                    //console.log(loop_year+parseInt(loop_month/12),(loop_month)%12)
+                    days+=get_days(loop_year+parseInt(loop_month/12),(loop_month)%12)
+                }
+                loop_month=loop_month+1
+        }
+        //console.log(days)
+        //console.log(month_1_day(dt,day))
+        var day_1=month_1_day(dt,day)//取得本月1号是星期几
+        if(day_1==0){
+            day_1=7
+        }
+        if(tip==0){
+            //console.log(day_1-days%7)
+            var result=day_1-days%7
+        }else{
+            //console.log(day_1+days%7)
+            var result=day_1+days%7
+        }
+        //console.log(result)
+        while(result<0){
+            result+=7
+        }
+        while(result>=7){
+            result-=7
+        }
+        //console.log(result)
+        //console.log(days%7)
+        return result
+
+        
+    }
+ 
+    function get_days(year,month){
+        //@param year,month 年、月
+        //返回值 本年的本月有多少天 
+        var ar=[31,28,31,30,31,30,31,31,30,31,30,31]
+        if(year%100==0&&year%400==0){
+            ar[1]=29
+        }else if(year%100!=0&&year%4==0){
+            ar[1]=29
+        }
+        return ar[month]
+    }
+
+    function get_pre_days(year,month){
+        //@param year,month 年、月
+        //返回值  上一月有多少天 
+        if(month==0){
+            year=year-1
+            month=11
+        }else{
+            month=month-1
+        }
+        return get_days(year,month)
+    }
+    
+    for(var i=0;i<arr.length;i++){
+        var sp=document.createElement("span")
+        sp.className="inner inner-top"
+        sp.innerHTML=arr[i]
+        bottom_t.appendChild(sp)
+    }
+    //填充星期
+    
+    function fill_days(year,month,dt,day){
+        //@param year,month,dt,day 年、月、日、星期
+        //无返回值 自动填充日历的天
+        var loop_day=1//定义循环内的日期，默认为1
+        for(var i=0;i<35;i++){
+            var sp=document.createElement("span") 
+            //console.log(i)
+            if(i<month_1_day(dt,day)){
+                sp.innerHTML=get_pre_days(year,month)-month_1_day(dt,day)+i+1
+                sp.className="inner inner-top"
+            }else if(i>=month_1_day(dt,day)&&loop_day<get_days(year,month)){
+                //console.log(loop_day)
+                loop_day=i-month_1_day(dt,day)+1
+                sp.innerHTML=loop_day
+                sp.className="inner"
+            }else{
+                sp.innerHTML=i-month_1_day(dt,day)-get_days(year,month)+1
+                sp.className="inner inner-top"
+            }
+            //sp.innerHTML=i
+            if(loop_day==date.getDate()){
+                sp.className="inner inner-checked"
+            }
+            
+            bottom_b.appendChild(sp)
+        }
+    }
+    fill_days(year,month,dt,day)
+    //填充天
+
+    for(var i=0;i<12;i++){
+        var op=document.createElement("option")
+        op.value=year+"-"+i
+        op.className="opt"
+        if(i==month){
+            op.selected="selected"
+        }
+        op.innerHTML=year+"-"+(i+1)
+
+        selecter.appendChild(op)
+    }
+    //填充选择器
+
+    var opts=document.getElementsByClassName("opt")
+    for(var i=0;i<opts.length;i++){
+        opts[i].onclick=function(){
+            console.log(this.value.split("-"))
+            var y=this.value.split("-")[0]
+            var m=this.value.split("-")[1]
+            console.log(every_month_1_day(year,month,y,m))
+            var sps=bottom_b.getElementsByTagName("span")
+            let loop_day=1
+            for(var i=0;i<sps.length;i++){
+                sps[i].innerHTML=i
+                if(i<every_month_1_day(year,month,y,m)){
+                    sps[i].innerHTML=get_pre_days(y,m)-every_month_1_day(year,month,y,m)+i+1
+                    sps[i].className="inner inner-top"
+                }else if(i>=every_month_1_day(year,month,y,m)&&loop_day<get_days(y,m)){
+                    //console.log(loop_day)
+                    loop_day=i-every_month_1_day(year,month,y,m)+1
+                    sps[i].innerHTML=loop_day
+                    sps[i].className="inner"
+                }else{
+                    sps[i].innerHTML=i-every_month_1_day(year,month,y,m)-get_days(y,m)+1
+                    sps[i].className="inner inner-top"
+                }
+                //sp.innerHTML=i
+                if(loop_day==date.getDate()&&year==y&&month==m){
+                    sps[i].className="inner inner-checked"
+                }
+            }
+            
+        }
+    }
+    //选择器添加点击事件
+
+    var sps=bottom_b.getElementsByTagName("span")
+    for(var i=0;i<sps.length;i++){
+        sps[i].onclick=function(){
+            console.log(7)
+            for(var j=0;j<sps.length;j++){
+                sps[j].classList.remove("inner-checked")
+            }
+            this.classList.add("inner-checked")
+        }
+    }
+    
+    console.log("系统时间：",date.getFullYear(),date.getMonth(),date.getDate(),date.getDay())
+}
+</script>
+<body>
+    <div id="main">
+        <div id="top">
+            <select name="123" id="selecter">
+            </select>
+            <!-- selected属性在火狐浏览器不被识别 -->
+        </div>
+        <div id="bottom">
+            <div id="bottom-t"></div>
+            <div id="bottom-b"></div>
+        </div>
+    </div>
+</body>
+</html>

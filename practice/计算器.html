@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>计算器</title>
+    <style>
+    #main{
+        display: inline-block;
+        border: 1px solid black;
+    }
+    #container{
+        margin:1rem 1rem;
+        width:22rem;
+    }
+    .btn{
+        cursor: pointer;
+        width:4rem;
+        height:4rem;
+        line-height: 4rem;
+        padding:0.5rem;
+        border-radius: 4rem;
+        display: inline-flex;
+        justify-content: center;
+        font-size: 2rem;
+        border:1px solid black;
+    }
+    #top{
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    </style>
+    <script>
+    window.onload=function(){
+        var btns=document.getElementsByClassName("btn")
+        var txt=document.getElementById("txt")
+        var del=document.getElementById("del")
+        var num1=""
+        var num2=""
+        var temp_1=0
+        var temp_2=0
+        var czf=""
+        var result=0
+        txt.value=0
+        del.onclick=function(){
+            num1=""
+            num2=""
+            temp_1=0
+            temp_2=3
+            txt.value=0
+        }
+        function calc(n1,czf,n2){
+            n1=parseFloat(n1)
+            n2=parseFloat(n2)
+            switch (czf){
+                case "+":
+                    return n1+n2
+                    break
+                case "-":
+                    return n1-n2
+                    break
+                case "*":
+                    return n1*n2
+                    break
+                case "/":
+                    return n1/n2
+                    break
+            }
+        }
+        
+        for(var i=0;i<btns.length;i++){
+            btns[i].onclick=function(){
+                var val=this.innerHTML
+                console.log("当前输入的是：",val)
+                if(val<10||val=="."){
+                    /*
+                    如果输入的是数字：
+                    1.上一次计算完成，清空所有变量
+                    2.temp_1未存值，输入内容追加到num1上
+                    3.其他情况，输入内容追加到num2上
+                    */
+                    if(num1!=""&&num2!=""&&czf!=""&&parseFloat(num2)==temp_2){
+                        console.log("clear all data!")
+                        num1=""
+                        num2=""
+                        temp_1=0
+                        temp_2=0
+                    }
+                    if(temp_1==0&&num1!="0"){
+                        if(val=="."&&num1.indexOf(".")!=-1){//处理小数点的输入问题
+                             //do nothing
+                        }else{
+                            if(num1==0){
+                                num1=val
+                            }else{
+                                num1+=val
+                            }    
+                            txt.value=num1   
+                        }                                 
+                    }else if(parseFloat(num2)!=temp_2){
+                        if(val=="."&&num2.indexOf(".")!=-1){
+                            //do nothing
+                        }else{
+                            if(num2==0){
+                                num2=val
+                            }else{
+                                num2+=val
+                            }              
+                            txt.value=num2
+                        }         
+                    }
+                    console.log("input num>>","num1:",num1,"num2:",num2,"temp_1:",temp_1,"temp_2:",temp_2,"czf:",czf)
+                    
+                }else{
+                    /*
+                    如果输入的不是数字：
+                    1.判断num1和temp_1，即用户未输入任何数字直接输入操作符，将num1自动设置为0
+                    2.num1有值，而num2无值，说明此时即将输入第二个值，将num1中的值，转换成数字后存入temp_1中
+                    3.num1、num2均有值，说明此时将要进行计算，进一步判断用户输入的是操作符还是等号：
+                        1）用户输入的是操作符，判断temp_2是否为0:
+                            （1）如果是0，说明上一次点击的是操作符（+-*／），将num2转换成数字后存入temp_2，计算出结果显示并存入temp_1，并将部分变量初始化
+                            （2）否则，上一次点击的是“=”，将num2、temp_2初始化
+                        2）用户输入的是“=”，判断num2是否存值：
+                            （1）num2为空且temp_2为0，说明用户只输入一个数，将num1的值存入temp_1，将num2设置为""，czf设置为“+”
+                            （2）否则，计算并显示出结果，计算结果赋值给result，并初始化result
+                    4.判断是否是操作符（+-*／），如果是且czf为“”，将其赋值给czf
+                    */
+                        
+                    if(num1==""&&temp_1==0){
+                        num1="0"
+                    }else if(num2==""&&val!="="){
+                        if(temp_1==0&&num1!=""){
+                            temp_1=parseFloat(num1)
+                        }                       
+                        txt.value=val
+                    }else{
+                        if(val!="="){
+                            if(temp_2==0){
+                                temp_2=parseFloat(num2)                               
+                                console.log("t1:",temp_1,"t2:",temp_2,"czf:",czf,"result",calc(temp_1,czf,temp_2))                
+                                result=parseFloat(calc(temp_1,czf,temp_2)).toFixed(10)
+                                txt.value=result                     
+                                temp_1=result
+                                temp_2=0
+                                num1=result
+                                num2=""
+                                result=0
+                            }else{
+                                num2=""
+                                temp_2=0
+                            }
+                            
+                        }else{
+                            if(num2==""&&temp_2==0){
+                                num2=""
+                                czf="+"
+                                temp_1=parseFloat(num1)
+                                temp_2=0
+                                txt.value=temp_1
+                                
+                            }else{
+                                temp_2=parseFloat(num2)               
+                                result=parseFloat(calc(temp_1,czf,temp_2)).toFixed(10)
+                                txt.value=result                     
+                                temp_1=result
+                                result=0
+                            }
+                        }
+                        
+                    }
+                    if(val!="="){
+                        czf=val   
+                    } 
+                    console.log("num1:",num1,"num2:",num2,"temp_1:",temp_1,"temp_2:",temp_2,"czf:",czf)
+                               
+                }
+
+                
+
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="main">
+        <div id="top">
+            <input type="text" id="txt" style="margin-left:1rem;font-size:2rem;width:18rem;line-height: 3rem;display: inline-block;border: none;">
+            <span id="del" style="cursor:pointer;display:inline-block;width:1rem;height:1rem;border-radius: 1rem;line-height:1rem;background-color: grey;color: white;text-align: center;">x</span>
+        </div>
+        <div id="container">
+            <div class="btn">7</div>
+            <div class="btn">8</div>
+            <div class="btn">9</div>
+            <div class="btn">+</div>
+            <div class="btn">4</div>
+            <div class="btn">5</div>
+            <div class="btn">6</div>
+            <div class="btn">*</div>
+            <div class="btn">1</div>
+            <div class="btn">2</div>
+            <div class="btn">3</div>
+            <div class="btn">-</div>
+            <div class="btn">0</div>
+            <div class="btn">.</div>
+            <div class="btn">=</div>
+            <div class="btn">/</div>
+        </div>
+    </div>
+</body>
+</html>
