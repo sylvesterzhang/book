@@ -21,7 +21,7 @@
 title: sylvesterzhang
 email: sylvesterzhang@sina.com
 description: Themed by ejjoo
-baseurl: /book
+baseurl: ""
 url: "http://sylvesterzhang.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username: sylvesterzhang
 highlighter: rouge
