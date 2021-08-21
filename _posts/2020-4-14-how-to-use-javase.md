@@ -5119,3 +5119,57 @@ Stream<T> skip(long n);
 public static <T> Stream<T> concat(Stream<? extends T> a, Stream<? extends T> b);
 ```
 
+8）统计计算
+
+(1)定义实体类
+
+```java
+package com.zhanghuan.scheduler;
+
+
+public class Book {
+    private int price;
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+}
+
+```
+
+(2)使用
+
+```java
+package com.zhanghuan.scheduler;
+
+import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
+public class Test {
+
+    @org.junit.jupiter.api.Test
+    public void test(){
+        List<Book> books = new ArrayList<>();
+        for(int i=0;i<100;i++){
+            Book book = new Book();
+            book.setPrice(i);
+            books.add(book);
+        }
+        IntSummaryStatistics statistics = books.stream().collect(Collectors.summarizingInt(Book::getPrice));
+        System.out.println(statistics.getAverage());
+        System.out.println(statistics.getCount());
+        System.out.println(statistics.getMax());
+        System.out.println(statistics.getMin());
+        System.out.println(statistics.getSum());
+    }
+}
+
+```
+

@@ -116,6 +116,21 @@ bin/zkServer.sh start
 bin/zkCli.sh
 ```
 
+5）看日志
+
+```
+zkServer.sh start-foreground
+```
+
+如果启动不成功，日志中显示端口被暂用，可将zoo.cfg客户端端口进行修改，并关闭adminServer
+
+```
+clientPort=40008
+admin.enableServer=false
+```
+
+
+
 ---
 
 **常见命令**
