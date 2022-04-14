@@ -5,6 +5,8 @@ tags: linux
 categories: linux
 ---
 
+基本操作、修改配置文件、开始
+
 # 基本操作
 
 1）安装
