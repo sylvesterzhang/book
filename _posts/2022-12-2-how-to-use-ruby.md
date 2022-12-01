@@ -1,8 +1,8 @@
 ---
 layout: post
 title: ruby入门
-tags: 后端
-categories: 后端
+tags: backend
+categories: backend
 ---
 
 第一个程序、定义类、打印方法、判断是否有方法属性、放开属性、数组、注释、字符串操作、字典、类型转换、静态方法、继承、模块、流程控制、循环、异常处理
