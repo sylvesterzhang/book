@@ -11,9 +11,7 @@ categories: backend
 
 # 服务配置探针
 
-```
 无侵入配置
-```
 
 ## 1.下载agent并解压
 
