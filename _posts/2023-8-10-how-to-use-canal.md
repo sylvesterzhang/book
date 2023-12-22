@@ -67,6 +67,7 @@ services:
 
 ```
 SHOW MASTER STATUS;
+show variables like '%log_bin%';
 ```
 
 ## 3）创建用户
