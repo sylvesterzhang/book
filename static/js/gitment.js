@@ -3240,7 +3240,7 @@ var Gitment =
                     req.setRequestHeader('Content-Type', 'application/json');
                 }
 
-                req.send(body);
+                //req.send(body);
                 return p;
             };
         }
