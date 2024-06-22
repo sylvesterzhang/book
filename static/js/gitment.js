@@ -3240,7 +3240,7 @@ var Gitment =
                     req.setRequestHeader('Content-Type', 'application/json');
                 }
 
-                req.send(body);
+                //req.send(body);
                 return p;
             };
         }
@@ -3490,14 +3490,14 @@ var Gitment =
                         labels = this.labels;
 
 
-                    return _utils.http.post('/repos/' + owner + '/' + repo + '/issues', {
-                        title: title,
-                        labels: labels.concat(['gitment', id]),
-                        body: link + '\n\n' + desc
-                    }).then(function (meta) {
-                        _this5.state.meta = meta;
-                        return meta;
-                    });
+                    // return _utils.http.post('/repos/' + owner + '/' + repo + '/issues', {
+                    //     title: title,
+                    //     labels: labels.concat(['gitment', id]),
+                    //     body: link + '\n\n' + desc
+                    // }).then(function (meta) {
+                    //     _this5.state.meta = meta;
+                    //     return meta;
+                    // });
                 }
             }, {
                 key: 'getIssue',

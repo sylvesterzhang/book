@@ -41,7 +41,7 @@ Flink CDC (Change Data Capture) 是一种用于捕获和处理数据源中的变
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <flink-version>1.13.0</flink-version>
+   <flink-version>1.17.0</flink-version>
   </properties>
 
   <dependencies>
@@ -50,61 +50,68 @@ Flink CDC (Change Data Capture) 是一种用于捕获和处理数据源中的变
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-connector-base</artifactId>
-      <version>1.14.4</version>
+      <version>${flink-version}</version>
     </dependency>
+
     <!--        CDC mysql 源-->
     <dependency>
       <groupId>com.ververica</groupId>
       <artifactId>flink-sql-connector-mysql-cdc</artifactId>
-      <version>2.3.0</version>
+      <version>2.4.2</version>
     </dependency>
+
     <!--        Flink Steam流处理-->
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-streaming-java_2.11</artifactId>
-      <version>1.14.4</version>
+      <artifactId>flink-streaming-java</artifactId>
+      <version>${flink-version}</version>
     </dependency>
+
     <!--        flink java客户端-->
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-clients_2.12</artifactId>
-      <version>1.14.4</version>
+      <artifactId>flink-clients</artifactId>
+      <version>${flink-version}</version>
     </dependency>
+
     <!--        开启webui支持，默认是8081，默认没有开启-->
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-runtime-web_2.12</artifactId>
-      <version>1.14.4</version>
+      <artifactId>flink-runtime-web</artifactId>
+      <version>${flink-version}</version>
     </dependency>
+
     <!--        Flink Table API和SQL API使得在Flink中进行数据处理变得更加简单和高效
     通过使用Table API和SQL API，可以像使用传统的关系型数据库一样，通过编写SQL语句或者使用类似于
     Java的API进行数据处理和分析-->
     <dependency>
       <groupId>org.apache.flink</groupId>
-      <artifactId>flink-table-runtime_2.11</artifactId>
-      <version>1.14.4</version>
+      <artifactId>flink-table-runtime</artifactId>
+      <version>${flink-version}</version>
     </dependency>
+
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.2.11</version>
     </dependency>
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>2.0.6</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-core</artifactId>
-      <version>5.8.23</version>
     </dependency>
 
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.75</version>
+    </dependency>
+
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-core</artifactId>
+      <version>5.8.23</version>
     </dependency>
 
   </dependencies>
@@ -324,6 +331,11 @@ public class FlinkCDC {
 }
 
 
+```
+
+application.properties
+```
+syncTime=2023-12-22 14:00:00
 ```
 
 执行结果
